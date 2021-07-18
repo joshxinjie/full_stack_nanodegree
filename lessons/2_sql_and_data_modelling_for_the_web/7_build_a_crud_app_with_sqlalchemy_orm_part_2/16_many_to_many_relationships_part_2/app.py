@@ -1,0 +1,24 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://myuser:password@localhost:5432/todoapp'
+db = SQLAlchemy(app)
+
+order_items = db.Table('order_items',
+    db.Column('order_id', db.Integer, db.ForeignKey('order.id'), primary_key=True),
+    db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
+)
+
+class Order(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  status = db.Column(db.String(), nullable=False)
+  products = db.relationship('Product', secondary=order_items,
+      backref=db.backref('orders', lazy=True))
+
+class Product(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(), nullable=False)
+
+if __name__ == '__main__':
+  app.run(host="0.0.0.0", port=3000)
