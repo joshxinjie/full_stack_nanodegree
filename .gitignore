@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+fsndl3/
+requests/
+**/node_modules/*
