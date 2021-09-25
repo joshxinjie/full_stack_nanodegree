@@ -37,7 +37,7 @@ def create_app(test_config=None):
         )
         return response
 
-    @app.route("/books")
+    @app.route("/books", methods=["GET"])
     def retrieve_books():
         selection = Book.query.order_by(Book.id).all()
         current_books = paginate_books(request, selection)
@@ -121,7 +121,8 @@ def create_app(test_config=None):
                     {
                         "success": True,
                         "books": current_books,
-                        "total_books": len(selection.all())
+                        "total_books": len(selection.all()),
+                        "search": search
                     }
                 )
             
